@@ -3,10 +3,10 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 class ContractType(models.Model):
     class FullOrPart(models.TextChoices):
-        FULL = "FT", _("Full time")
-        PART = "PT", _("Part time")
+        FULL = "Full Time", _("Full time")
+        PART = "Part Time", _("Part time")
         
-    contract = models.CharField(('Tipo de contrato'), max_length=2, choices=FullOrPart)
+    contract = models.CharField(('Tipo de contrato'), max_length=9, choices=FullOrPart)
     
     def __str__(self):
         return self.contract

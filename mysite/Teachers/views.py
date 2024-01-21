@@ -5,5 +5,7 @@ from django.http import HttpResponse
 def index(request):
     return render(request,"Teachers/index.html")
 
+
+#delete when the page is ready
 def navbar(request):
-    return render(request,"Teachers/navbar.html")
+    return render(request,"Teachers/newAndUpd.html")
