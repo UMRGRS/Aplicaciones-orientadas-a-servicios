@@ -16,7 +16,7 @@
         <form action="" method="post">
             {% csrf_token %}
             <fieldset>
-                <label for="search" class="form-label text-white fs-4">Búsqueda</label>
+                <label for="textToSearch" class="form-label text-white fs-4">Búsqueda</label>
                 <input type="text" class="form-control mb-2" id="textToSearch" name="textToSearch"
                     placeholder="Ingresa el nombre de un maestro" required>
             </fieldset>
@@ -26,22 +26,37 @@
 
     <section class="container-fluid">
         <p class="text-white fs-4">Maestros en plantilla</p>
-        <!--Colocar un if para mostrar un mensaje si no hay maestros-->
+        {%if teachers_list %}
         <ul class="list-group">
+            {% for teacher in teachers_list%}
             <li class="list-group-item">
                 <div class="row mt-2">
-                    <div class="col-8">
-                        <p class="fs-5">Nombre maestro</p>
+                    <div class="col-lg-3">
+                        <p class="fs-5">
+                            <strong>Nombre/s: </strong>{{teacher.name}}
+                        </p>
                     </div>
-                    <div class="col-2">
-                        <a href="#" class="btn btn-primary">Detalles</a>
+                    <div class="col-lg-3">
+                        <p class="fs-5">
+                            <strong>Apellido/s: </strong>{{teacher.lastname1}} {{teacher.lastname2}}
+                        </p>
                     </div>
-                    <div class="col-2">
-                        <a href="#" class="btn btn-danger">Eliminar</a>
+                    <div class="col-sm-2">
+                        <a href="{% url 'Teachers:details' teacher.id%}" class="btn btn-success">Detalles</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'Teachers:updateInfo' teacher.id%}" class="btn btn-primary">Actualizar</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{% url 'Teachers:delete' teacher.id%}" class="btn btn-danger">Eliminar</a>
                     </div>
                 </div>
             </li>
+            {% endfor%}
         </ul>
+        {% else %}
+        <p class="text-white fs-4">No hay maestros registrados</p>
+        {% endif %}
     </section>
 </body>
 

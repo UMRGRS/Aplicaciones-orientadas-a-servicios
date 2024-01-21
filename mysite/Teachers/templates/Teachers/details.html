@@ -29,7 +29,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.name}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.lastname1}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.lastname2}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.age}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.maleOrFemale}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <!--Database field-->
-                                        <p class="text-muted mb-0">owo</p>
+                                        <p class="text-muted mb-0">{{teacher.contractType}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -91,10 +91,10 @@
                 <p class="text-white fs-3 my-3">Acciones</p>
                 <div class="row">
                     <div class="col-lg-6">
-                        <a href="#" class="btn btn-primary mb-3">Actualizar</a>
+                        <a href="{% url 'Teachers:updateInfo' teacher.id%}" class="btn btn-success mb-3">Actualizar</a>
                     </div>
                     <div class="col-lg-6">
-                        <a href="#" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'Teachers:delete' teacher.id%}" class="btn btn-danger">Eliminar</a>
                     </div>
                 </div>
             </section>

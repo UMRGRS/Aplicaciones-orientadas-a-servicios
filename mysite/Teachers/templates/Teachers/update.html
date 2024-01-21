@@ -18,45 +18,35 @@
                     width="150" height="150" class="rounded-circle mt-5">
             </section>
             <section class="col-sm-7">
-                <p class="text-white fs-3 my-3">Nuevo maestro</p>
-                <!--Set action="register new teacher" and redirect to the same page with a message-->
-                <form action="">
+                <p class="text-white fs-3 my-3">Actualizar información</p>
+                <form action="{% url 'Teachers:save_update' teacher.id %}" method="post">
                     {% csrf_token %}
                     <fieldset>
                         <label for="nombre" class="form-label text-white fs-4 mb-2">Nombre/s</label>
-                        <input type="text" class="form-control mb-2" id="nombre" name="newName" required>
+                        <input type="text" class="form-control mb-2" id="nombre" name="newName" value="{{teacher.name}}" required>
                         <label for="LN1" class="form-label text-white fs-4 mb-2">Apellido 1</label>
-                        <input type="text" class="form-control mb-2" id="LN1" name="newLastName1" required>
+                        <input type="text" class="form-control mb-2" id="LN1" name="newLastName1" value="{{teacher.lastname1}}" required>
                         <label for="LN2" class="form-label text-white fs-4 mb-2">Apellido 2</label>
-                        <input type="text" class="form-control mb-2" id="LN2" name="newLastName2" required>
+                        <input type="text" class="form-control mb-2" id="LN2" name="newLastName2" value="{{teacher.lastname2}}" required>
                         <label for="age" class="form-label text-white fs-4 mb-2">Edad</label>
-                        <input type="number" class="form-control mb-2" id="age" name="newAge" required>
+                        <input type="number" class="form-control mb-2" id="age" name="newAge" value="{{teacher.age}}" required>
                         <label for="sex" class="form-label text-white fs-4 mb-2">Sexo</label>
-                        <select id="sex" name="sexo" class="form-control mb-2">
-                            <option value="" selected disabled hidden>Selecciona una opción</option>
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
+                        <select id="sex" name="sexo" class="form-control mb-2" required>
+                            <option value="{{teacher.maleOrFemale}}" selected hidden>{{teacher.maleOrFemale}}</option>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
                         </select>
                         <label for="contract" class="form-label text-white fs-4 mb-2">Contrato</label>
-                        <select id="contract" name="contract" class="form-control mb-2">
-                            <option value="" selected disabled hidden>Selecciona una opción</option>
+                        <select id="contract" name="contractType" class="form-control mb-2" required>
+                            <option value="{{teacher.contractType}}" selected hidden>{{teacher.contractType}}</option>
                             <option value="Part Time">Part Time</option>
                             <option value="Full Time">Full Time</option>
                         </select>
                     </fieldset>
+                    <input type="submit" value="Aceptar" class="btn btn-primary">
+                    <!--Opcional: Agregar modal "Estas seguro"-->
+                    <a href="{% url 'Teachers:search'%}" class="btn btn-danger">Cancelar</a>
                 </form>
-
-            </section>
-            <section class="col-sm-2">
-                <p class="text-white fs-3 my-3">Acciones</p>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <a href="#" class="btn btn-primary mb-3">Aceptar</a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a href="#" class="btn btn-danger">Cancelar</a>
-                    </div>
-                </div>
             </section>
         </div>
     </section>
