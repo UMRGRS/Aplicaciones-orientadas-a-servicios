@@ -28,7 +28,6 @@
                                         <p class="mb-0">Nombre/s</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.name}}</p>
                                     </div>
                                 </div>
@@ -38,7 +37,6 @@
                                         <p class="mb-0">Apellido 1</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.lastname1}}</p>
                                     </div>
                                 </div>
@@ -48,7 +46,6 @@
                                         <p class="mb-0">Apellido 2</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.lastname2}}</p>
                                     </div>
                                 </div>
@@ -58,7 +55,6 @@
                                         <p class="mb-0">Edad</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.age}}</p>
                                     </div>
                                 </div>
@@ -68,7 +64,6 @@
                                         <p class="mb-0">Sexo</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.maleOrFemale}}</p>
                                     </div>
                                 </div>
@@ -78,7 +73,6 @@
                                         <p class="mb-0">Contrato</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <!--Database field-->
                                         <p class="text-muted mb-0">{{teacher.contractType}}</p>
                                     </div>
                                 </div>
@@ -94,7 +88,10 @@
                         <a href="{% url 'Teachers:updateInfo' teacher.id%}" class="btn btn-success mb-3">Actualizar</a>
                     </div>
                     <div class="col-lg-6">
-                        <a href="{% url 'Teachers:delete' teacher.id%}" class="btn btn-danger">Eliminar</a>
+                        <form action="{% url 'Teachers:delete'%}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Delete" value="{{teacher.id}}" class="btn btn-danger">Eliminar</button>
+                        </form>
                     </div>
                 </div>
             </section>

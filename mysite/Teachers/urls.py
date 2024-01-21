@@ -15,7 +15,7 @@ urlpatterns = [
     path("<int:teacher_id>/save_update", views.SaveUpdate, name="save_update"),
     
     #Delete teachers urls
-    path("<int:teacher_id>/delete", views.Delete, name="delete"),
+    path("delete", views.Delete, name="delete"),
     
     #Visualize info urls
     path("search",views.Search, name="search"),

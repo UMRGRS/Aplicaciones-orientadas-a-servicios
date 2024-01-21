@@ -48,7 +48,10 @@
                         <a href="{% url 'Teachers:updateInfo' teacher.id%}" class="btn btn-primary">Actualizar</a>
                     </div>
                     <div class="col-sm-2">
-                        <a href="{% url 'Teachers:delete' teacher.id%}" class="btn btn-danger">Eliminar</a>
+                        <form action="{% url 'Teachers:delete'%}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Delete" value="{{teacher.id}}" class="btn btn-danger">Eliminar</button>
+                        </form>
                     </div>
                 </div>
             </li>

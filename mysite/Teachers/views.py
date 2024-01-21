@@ -39,8 +39,8 @@ def SaveUpdate(request, teacher_id):
     return HttpResponseRedirect(reverse('Teachers:details',args=(teacher.pk,)))
 
 #Delete teachers views
-def Delete(request, teacher_id):
-    TeachersInfo.objects.filter(pk=teacher_id).delete()
+def Delete(request):
+    TeachersInfo.objects.filter(pk=request.POST["Delete"]).delete()
     return HttpResponseRedirect(reverse('Teachers:search'))
     
 #Visualize info views
