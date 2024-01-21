@@ -52,7 +52,6 @@ def Details(request, teacher_id):
     teacher = get_object_or_404(TeachersInfo, pk=teacher_id)
     return render(request,"Teachers/details.html",{"teacher":teacher})
 
-
 #test view
 def navbar(request):
     return render(request,"Teachers/registerTeachers.html")
