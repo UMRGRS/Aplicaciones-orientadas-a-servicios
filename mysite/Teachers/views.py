@@ -45,8 +45,27 @@ def Delete(request):
     
 #Visualize info views
 def Search(request):
-    allTeachers = TeachersInfo.objects.all()
-    return render(request,"Teachers/search.html",{"teachers_list": allTeachers})
+    if('search' in request.POST):
+        if(request.POST['name_to_search']==None):
+            name=" "
+        else:
+            name=request.POST['name_to_search']
+        if(request.POST['lastname_to_search1']==None):
+            lastname1=" "
+        else:
+            lastname1=request.POST['lastname_to_search1']
+        if(request.POST['lastname_to_search2']==None):
+            lastname2=" "
+        else:
+            lastname2=request.POST['lastname_to_search2']
+            
+        all_teachers = TeachersInfo.objects.filter(name__icontains=name).filter(
+            lastname1__icontains=lastname1).filter(
+                lastname2__icontains=lastname2)
+    else:
+        all_teachers = TeachersInfo.objects.all()
+    
+    return render(request,"Teachers/search.html",{"teachers_list": all_teachers})
     
 def Details(request, teacher_id):
     teacher = get_object_or_404(TeachersInfo, pk=teacher_id)

@@ -13,12 +13,24 @@
     {%include "Teachers/navbar.html"%}
     <section class="container-fluid mb-3">
         <!--Make action = "search view" and return the names that match the search"-->
-        <form action="" method="post">
+        <form action="{% url 'Teachers:search'%}" method="post">
             {% csrf_token %}
-            <fieldset>
-                <label for="textToSearch" class="form-label text-white fs-4">Búsqueda</label>
-                <input type="text" class="form-control mb-2" id="textToSearch" name="textToSearch"
-                    placeholder="Ingresa el nombre de un maestro" required>
+            <fieldset class="row">
+                <div class="col">
+                    <label for="name_search" class="form-label text-white fs-4">Nombre/s</label>
+                    <input type="text" class="form-control mb-2" id="name_search" name="name_to_search"
+                        placeholder="Nombre/s">
+                </div>
+                <div class="col">
+                    <label for="lastname_search1" class="form-label text-white fs-4">Apellido 1</label>
+                    <input type="text" class="form-control mb-2" id="lastname_search1" name="lastname_to_search1"
+                        placeholder="Apellido 1">
+                </div>
+                <div class="col">
+                    <label for="lastname_search2" class="form-label text-white fs-4">Apellido 2</label>
+                    <input type="text" class="form-control mb-2" id="lastname_search2" name="lastname_to_search2"
+                        placeholder="Apellido 2">
+                </div>
             </fieldset>
             <input type="submit" class="btn btn-primary" name="search" value="Buscar">
         </form>
