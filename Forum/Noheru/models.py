@@ -31,8 +31,8 @@ class Responses(models.Model):
     
     #Foreign keys
     user = models.ForeignKey("Users", on_delete=models.CASCADE)
-    post = models.ForeignKey("Posts", on_delete=models.CASCADE)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE)
+    post = models.ForeignKey("Posts", on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
-        return (f'Response: {self.response_content} response_date: {self.response_publish_date} Creator: {self.user} Post: {self.post}')
+        return (f'ID: {self.pk} Response: {self.response_content}')
