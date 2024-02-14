@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'Serializers_Test.apps.SerializersTestConfig',
     'Teachers.apps.TeachersConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
