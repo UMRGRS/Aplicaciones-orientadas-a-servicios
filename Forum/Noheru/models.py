@@ -1,5 +1,9 @@
 from django.db import models
+
 from fernet_fields import EncryptedCharField, EncryptedEmailField
+
+from datetime import datetime
+
 # Create your models here.
 
 class User(models.Model):
@@ -15,24 +19,24 @@ class Post(models.Model):
     post_title = models.CharField(("Title"), max_length=200)
     post_summary = models.CharField(("Summary"), max_length=100)
     post_content = models.CharField(("Content"), max_length=1000)
-    post_publish_date = models.DateTimeField()
+    post_publish_date = models.DateTimeField(default=datetime.now())
     up_votes = models.IntegerField(default=0)
     
     #Foreign keys
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    creator = models.ForeignKey("User", on_delete=models.CASCADE)
     
     def __str__(self):
         return (f'Post_ID: {self.pk} Post_title: {self.post_title}')
 
-class Response(models.Model):
-    response_content = models.CharField(("Content"), max_length=500)
+class Comment(models.Model):
+    comment_content = models.CharField(("Content"), max_length=500)
     up_votes = models.IntegerField(default=0)
-    response_publish_date = models.DateTimeField(auto_now_add = True)
+    comment_publish_date = models.DateTimeField(auto_now_add = True)
     
     #Foreign keys
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
-    post = models.ForeignKey("Post", on_delete=models.CASCADE, null=True, blank=True)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    creator = models.ForeignKey("User", on_delete=models.CASCADE)
+    parent_post = models.ForeignKey("Post", on_delete=models.CASCADE, null=True, blank=True)
+    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
-        return (f'ID: {self.pk} Response: {self.response_content}')
+        return (f'ID: {self.pk} Comment: {self.response_content}')
