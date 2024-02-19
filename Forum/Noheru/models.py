@@ -39,4 +39,4 @@ class Comment(models.Model):
     parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
-        return (f'ID: {self.pk} Comment: {self.response_content}')
+        return (f'ID: {self.pk} Comment: {self.comment_content}')
