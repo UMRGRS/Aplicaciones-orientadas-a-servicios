@@ -23,8 +23,15 @@ class UserDetails(generics.RetrieveUpdateAPIView):
         
     def get(self, request, pk, format=None):
         user = self.get_user(pk)
-        serializer = UserSerializer(user, fields=('user_name', 'email', 'signature'))
+        serializer = UserSerializer(user, fields=('id', 'username', 'email', 'signature'))
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializer   
+
+#Post endpoints  
+class Comments(APIView):
+    def get(self, request, pk, format=None):
+        post = Post.objects.get(pk=pk)
+        serializer = PostSerializer(post, context={'postFormat':'compressed'})
+        return Response(serializer.data, status=status.HTTP_200_OK)

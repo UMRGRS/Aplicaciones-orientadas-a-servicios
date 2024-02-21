@@ -7,13 +7,13 @@ from datetime import datetime
 # Create your models here.
 
 class User(models.Model):
-    user_name = models.CharField(("Username"), max_length=20, unique=True)
+    username = models.CharField(("Username"), max_length=20, unique=True)
     password = EncryptedCharField(("Password"), max_length=20)
     email = EncryptedEmailField(("Email"), max_length=254)
     signature = models.CharField(("Signature phrase"), max_length=100, default="Hey! write something here")
     
     def __str__(self):
-        return(f'ID: {self.pk} Username: {self.user_name}')
+        return(f'ID: {self.pk} Username: {self.username}')
     
 class Post(models.Model):
     post_title = models.CharField(("Title"), max_length=200)
