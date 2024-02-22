@@ -26,16 +26,17 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'comment_content', 'up_votes', 'comment_publish_date', 'creator']
         
-class PostSerializer(serializers.ModelSerializer):
+class PostRetrieveSerializer(serializers.ModelSerializer):
     creator = UserSerializer(fields=('id', 'username'))
     comments = CommentSerializer(source='comment_set', many=True)
     
     def to_representation(self, obj):
-        ret = super(PostSerializer, self).to_representation(obj)
+        ret = super(PostRetrieveSerializer, self).to_representation(obj)
         postFormat = self.context.get('postFormat')
         match postFormat:
             case 'cpr':
                 ret.pop('comments')
+                ret.pop('post_content')
                 return ret 
             case 'com':
                 return ret
@@ -47,3 +48,8 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'post_title', 'post_summary', 'post_content', 'post_publish_date', 'up_votes', 'creator', 'comments']
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['post_title', 'post_summary', 'post_content', 'creator']

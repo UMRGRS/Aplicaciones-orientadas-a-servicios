@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User, Post, Comment
-from .serializers import UserSerializer, PostSerializer, CommentSerializer
+from .serializers import UserSerializer, PostRetrieveSerializer, PostCreateSerializer, CommentSerializer
 # Create your views here.
 
 #User endpoints
@@ -31,9 +31,9 @@ class UserDetails(generics.RetrieveUpdateDestroyAPIView):
 #Post endpoints
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = PostCreateSerializer
     
-class PostDetails(generics.RetrieveUpdateDestroyAPIView):
+class PostDetails(generics.RetrieveDestroyAPIView):
     def get_post(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -42,8 +42,13 @@ class PostDetails(generics.RetrieveUpdateDestroyAPIView):
         
     def get(self, request, pk, postFormat, format=None):
         post = self.get_post(pk)
-        serializer = PostSerializer(post, context={'postFormat':postFormat})
+        serializer = PostRetrieveSerializer(post, context={'postFormat':postFormat})
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    def delete(self, request, pk, format=None):
+        post = self.get_post(pk)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
     queryset = Post.objects.all()
-    serializer_class = PostSerializer()
+    serializer_class = PostRetrieveSerializer
