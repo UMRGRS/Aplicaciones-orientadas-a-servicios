@@ -6,9 +6,10 @@ from . import views
 
 app_name = "Noheru"
 urlpatterns = [
-    path('users/', views.CreateUser.as_view()),
-    path('users/<int:pk>/', views.UserDetails.as_view()),
-    path('comments/<int:pk>/', views.Comments.as_view()),
+    path('user-create/', views.CreateUser.as_view()),
+    path('user/<int:pk>/', views.UserDetails.as_view()),
+    path('post-create/', views.CreatePost.as_view()),
+    path('post/<int:pk>/<str:postFormat>/', views.PostDetails.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
