@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User, Post, Comment
-from .serializers import UserSerializer, PostRetrieveSerializer, PostSerializer, CommentSerializer
+from .serializers import UserSerializer, PostFormatSerializer, PostSerializer, CommentSerializer
 
 #User endpoints
-#create new users
+#create users
 class CreateUser(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -30,7 +30,7 @@ class UserDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer   
 
 #Post endpoints
-#create new posts
+#create posts
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -48,16 +48,40 @@ class PostDetails(generics.DestroyAPIView):
         except Post.DoesNotExist:
             raise Http404
         
-    def get(self, request, pk, postFormat, format=None):
-        post = self.get_post(pk)
-        serializer = PostRetrieveSerializer(post, context={'postFormat':postFormat})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, pk, format=None):
+        postFormat= request.GET.get('compressed')
+        if postFormat == "True" or postFormat == "False": 
+            post = self.get_post(pk)
+            serializer = PostFormatSerializer(post, context={'format':postFormat})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'details':'compressed argument must be either True or False'}, status=status.HTTP_400_BAD_REQUEST)
 
     queryset = Post.objects.all()
-    serializer_class = PostRetrieveSerializer
-    
+    serializer_class = PostFormatSerializer
+
+#Retrieve the most recent posts
 class MostRecentPosts(APIView):
     def get(self, request, format=None):
         posts = Post.objects.all().order_by('-post_publish_date')[:5]
-        serializer = PostRetrieveSerializer(posts, many=True)
+        serializer = PostFormatSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+#Comments end points
+#Create comments
+class CreateComment(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class RetrieveComment(APIView):
+    def get_comment(self, pk):
+        try:
+            return Comment.objects.get(pk=pk)
+        except:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        comment = self.get_comment(pk)
+        serializer = CommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_200_OK)

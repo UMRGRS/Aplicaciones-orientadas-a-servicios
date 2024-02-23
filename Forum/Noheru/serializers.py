@@ -2,8 +2,6 @@ from .models import User, Post, Comment
 
 from rest_framework import serializers
 
-from django.http import HttpResponseBadRequest
-
 class UserSerializer(serializers.ModelSerializer):
     #Dynamic fields serializer
     def __init__(self, *args, **kwargs):
@@ -21,33 +19,35 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'password', 'email', 'signature']
 
-class PostRetrieveSerializer(serializers.ModelSerializer):
-    creator = UserSerializer(fields=('id', 'username'))
-
-    def to_representation(self, obj):
-        ret = super(PostRetrieveSerializer, self).to_representation(obj)
-        postFormat = self.context.get('postFormat')
-        match postFormat:
-            case 'cpr':
-                ret.pop('post_content')
-                return ret 
-            case 'com':
-                return ret
-            case None:
-                return ret
-            case _:
-                ret = {"detail": f'format {postFormat} is invalid'}
-                return ret
-    class Meta:
-        model = Post
-        fields = ['id', 'post_title', 'post_summary', 'post_content', 'post_publish_date', 'up_votes', 'creator']
-
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
+
+class PostFormatSerializer(PostSerializer):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         
+        if  self.context.get('format') == "True":
+            self.Meta.exclude = ['post_content']
+
+    creator = UserSerializer(fields=('id', 'username'))
+    comments = serializers.SerializerMethodField()
+    
+    def get_comments(self, obj):
+        return CommentSerializer(obj.comment_set.all(), many=True).data
+    
+    class Meta:
+        model = Post
+        exclude = []
+    
 class CommentSerializer(serializers.ModelSerializer):
+    responses = serializers.SerializerMethodField()
+
+    def get_responses(self, obj):
+        return CommentSerializer(obj.parent.all(), many=True).data
+      
     class Meta:
         model = Comment
-        fields = ['id', 'comment_content', 'up_votes', 'comment_publish_date', 'creator']
+        fields = ['id', 'comment_content', 'up_votes', 'comment_publish_date', 'creator', 'responses']

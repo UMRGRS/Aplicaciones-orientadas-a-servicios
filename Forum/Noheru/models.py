@@ -36,7 +36,7 @@ class Comment(models.Model):
     #Foreign keys
     creator = models.ForeignKey("User", on_delete=models.CASCADE)
     parent_post = models.ForeignKey("Post", on_delete=models.CASCADE, null=True, blank=True)
-    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name='parent')
     
     def __str__(self):
         return (f'ID: {self.pk} Comment: {self.comment_content}')
