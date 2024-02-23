@@ -5,14 +5,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User, Post, Comment
-from .serializers import UserSerializer, PostRetrieveSerializer, PostCreateSerializer, CommentSerializer
-# Create your views here.
+from .serializers import UserSerializer, PostRetrieveSerializer, PostSerializer, CommentSerializer
 
 #User endpoints
+#create new users
 class CreateUser(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+#Retrieve, update and delete users
 class UserDetails(generics.RetrieveUpdateDestroyAPIView):
     def get_user(self, pk):
         try:
@@ -29,11 +30,18 @@ class UserDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer   
 
 #Post endpoints
+#create new posts
 class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostCreateSerializer
-    
-class PostDetails(generics.RetrieveDestroyAPIView):
+    serializer_class = PostSerializer
+
+#update posts
+class UpdatePost(generics.UpdateAPIView):
+    queryset= Post.objects.all()
+    serializer_class = PostSerializer
+
+#Retrieve and delete posts
+class PostDetails(generics.DestroyAPIView):
     def get_post(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -44,11 +52,12 @@ class PostDetails(generics.RetrieveDestroyAPIView):
         post = self.get_post(pk)
         serializer = PostRetrieveSerializer(post, context={'postFormat':postFormat})
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    def delete(self, request, pk, format=None):
-        post = self.get_post(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     queryset = Post.objects.all()
     serializer_class = PostRetrieveSerializer
+    
+class MostRecentPosts(APIView):
+    def get(self, request, format=None):
+        posts = Post.objects.all().order_by('-post_publish_date')[:5]
+        serializer = PostRetrieveSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

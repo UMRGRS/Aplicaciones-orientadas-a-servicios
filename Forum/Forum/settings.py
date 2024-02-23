@@ -69,6 +69,11 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+
+    'DATETIME_FORMAT': "%d/%m/%Y %H:%M:%S",
+}
+
 WSGI_APPLICATION = 'Forum.wsgi.application'
 
 
