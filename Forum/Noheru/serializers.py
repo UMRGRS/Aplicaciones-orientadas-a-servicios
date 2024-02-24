@@ -2,52 +2,59 @@ from .models import User, Post, Comment
 
 from rest_framework import serializers
 
+#User serializers
 class UserSerializer(serializers.ModelSerializer):
-    #Dynamic fields serializer
-    def __init__(self, *args, **kwargs):
-        fields = kwargs.pop('fields', None)
-
-        super().__init__(*args, **kwargs)
-
-        if fields is not None:
-            allowed = set(fields)
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
-
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'signature']
+        fields = '__all__'
 
+class BasicUserInfoSerializer(UserSerializer):
+    class Meta:
+        model = User
+        exclude = ['password', 'email', 'signature']
+
+#Posts serializers
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
 
 class PostFormatSerializer(PostSerializer):
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        if  self.context.get('format') == "True":
+        if self.context.get('format') == "True":
             self.Meta.exclude = ['post_content']
 
-    creator = UserSerializer(fields=('id', 'username'))
-    comments = serializers.SerializerMethodField()
-    
-    def get_comments(self, obj):
-        return CommentSerializer(obj.comment_set.all(), many=True).data
-    
+    creator = BasicUserInfoSerializer()
+
     class Meta:
         model = Post
         exclude = []
-    
-class CommentSerializer(serializers.ModelSerializer):
-    responses = serializers.SerializerMethodField()
+        
+class UpdatePostSerializer(PostSerializer):
+    class Meta:
+        model = Post
+        exclude = ['post_publish_date', 'up_votes', 'creator']
 
+#Comments serializers
+class CreateCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class RetrieveCommentsSerializer(CreateCommentSerializer):
+    creator = BasicUserInfoSerializer()
+    responses = serializers.SerializerMethodField()
+    
     def get_responses(self, obj):
-        return CommentSerializer(obj.parent.all(), many=True).data
+        return RetrieveCommentsSerializer(obj.parent.all()[:1], many=True).data
       
     class Meta:
         model = Comment
-        fields = ['id', 'comment_content', 'up_votes', 'comment_publish_date', 'creator', 'responses']
+        exclude=[]  
+
+class UpdateCommentSerializer(CreateCommentSerializer):
+    class Meta:
+        model = Comment
+        exclude=['comment_publish_date', 'creator', 'parent_post', 'parent_comment']

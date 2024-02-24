@@ -5,16 +5,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User, Post, Comment
-from .serializers import UserSerializer, PostFormatSerializer, PostSerializer, CommentSerializer
+from .serializers import UserSerializer, PostFormatSerializer, PostSerializer, UpdatePostSerializer, CreateCommentSerializer, RetrieveCommentsSerializer, UpdateCommentSerializer
 
 #User endpoints
-#create users
-class CreateUser(generics.CreateAPIView):
+#create users -
+class UserC(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-#Retrieve, update and delete users
-class UserDetails(generics.RetrieveUpdateDestroyAPIView):
+#Update user info -
+class UserU(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+#Retrieve and delete users -
+class UserRD(generics.DestroyAPIView):
     def get_user(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -23,25 +28,25 @@ class UserDetails(generics.RetrieveUpdateDestroyAPIView):
         
     def get(self, request, pk, format=None):
         user = self.get_user(pk)
-        serializer = UserSerializer(user, fields=('id', 'username', 'email', 'signature'))
+        serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     queryset = User.objects.all()
     serializer_class = UserSerializer   
 
 #Post endpoints
-#create posts
-class CreatePost(generics.CreateAPIView):
+#create posts -
+class PostC(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-#update posts
-class UpdatePost(generics.UpdateAPIView):
+#update posts -
+class PostU(generics.UpdateAPIView):
     queryset= Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = UpdatePostSerializer
 
-#Retrieve and delete posts
-class PostDetails(generics.DestroyAPIView):
+#Retrieve and delete posts -
+class PostRD(generics.DestroyAPIView):
     def get_post(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -60,7 +65,7 @@ class PostDetails(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostFormatSerializer
 
-#Retrieve the most recent posts
+#Retrieve the most recent posts -
 class MostRecentPosts(APIView):
     def get(self, request, format=None):
         posts = Post.objects.all().order_by('-post_publish_date')[:5]
@@ -68,20 +73,32 @@ class MostRecentPosts(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 #Comments end points
-#Create comments
-class CreateComment(generics.CreateAPIView):
+#Create comments -
+class CommentC(generics.CreateAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = CreateCommentSerializer
 
+#Update comment info
+class CommentU(generics.UpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = UpdateCommentSerializer
 
-class RetrieveComment(APIView):
-    def get_comment(self, pk):
+#Retrieve and delete comments -
+class CommentRD(generics.DestroyAPIView):
+    def get_post(self, pk):
         try:
-            return Comment.objects.get(pk=pk)
+            return Post.objects.get(pk=pk)
         except:
             raise Http404
     
     def get(self, request, pk, format=None):
-        comment = self.get_comment(pk)
-        serializer = CommentSerializer(comment)
+        post = self.get_post(pk)
+        comments = post.comment_set.all()[:20]
+        serializer = RetrieveCommentsSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    queryset = Comment.objects.all()
+    serializer_class = CreateCommentSerializer
+
+
+    
