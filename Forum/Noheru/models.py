@@ -1,15 +1,13 @@
 from django.db import models
 
-from fernet_fields import EncryptedCharField, EncryptedEmailField
-
 from datetime import datetime
 
 # Create your models here.
 
 class User(models.Model):
     username = models.CharField(("Username"), max_length=20, unique=True)
-    password = EncryptedCharField(("Password"), max_length=20)
-    email = EncryptedEmailField(("Email"), max_length=254)
+    password = models.CharField(("Password"), max_length=20)
+    email = models.EmailField(("Email"), max_length=254)
     signature = models.CharField(("Signature phrase"), max_length=100, default="Hey! write something here")
     
     def __str__(self):
