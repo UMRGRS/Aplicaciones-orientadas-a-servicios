@@ -9,11 +9,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
+from decouple import config, Csv
 from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +25,7 @@ SECRET_KEY = 'django-insecure-xcg@@t-uy3=z)w2*4x8#ipap$7_$g3p^iwh@2w#vxx%2oh@cug
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.100.80', 'intent-smoothly-collie.ngrok-free.app']
 
 
 # Application definition
@@ -93,11 +90,11 @@ DATABASES = {
 #    }
 'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'), # For local development, use 'localhost' or '127.0.0.1'
-        'PORT': os.environ.get('DATABASE_PORT'), # Default PostgreSQL port is usually '5432' 
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'), # For local development, use 'localhost' or '127.0.0.1'
+        'PORT': config('DATABASE_PORT'), # Default PostgreSQL port is usually '5432' 
     }
 }
 
